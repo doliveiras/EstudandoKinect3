@@ -3,6 +3,9 @@
 #Descrição
 Projeto responsável por reconhecimento dos movimentos do usuário e extração de dados.
 
+##Pré-Condição
+Necessário add projeto AuxiliarKinect
+
 ## Responsáveis
 * Daniel Oliveira
 * Natalia Mazzoni
