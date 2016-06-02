@@ -42,36 +42,36 @@ Realização da primeira inclusão do projeto EstudandoKinect3
 	
   * *EsqueletoUsuarioAuxiliar*
     * EsqueletoUsuarioAuxiliar
-      *@param KinectSensor
+    	*@param KinectSensor
     * ConverterCoordenadasArticulacao
-      *@param Joing, double, double
-      *@return ColorImagePoint
+    	*@param Joing, double, double
+    	*@return ColorImagePoint
     * CriarComponenteVisualArticulacao
-      *@param int, int, Brush
-      *@return ColorImagePoint
+    	*@param int, int, Brush
+      	*@return ColorImagePoint
     * DesenharArticulacao
-      *@param Joint, Canvas
+      	*@param Joint, Canvas
     * CriarComponenteVisualOsso
-      *@param int, Brush, double, double, double, double 
-      *@return Line
+      	*@param int, Brush, double, double, double, double 
+      	*@return Line
     * DesenharOsso
-      *@param Joint, Joint, Canvas
+      	*@param Joint, Joint, Canvas
 
   * *MainWindow.xaml.cs*
     * MainWindow
     * InicializarKinect
-      *@param KinectSensor
+      	*@param KinectSensor
     * ReconhecerHumanos
-      *@param DepthImageFrame
-      *@return BitmapSource
+      	*@param DepthImageFrame
+      	*@return BitmapSource
     * ReconhecerDistancia
-      *@param DepthImageFrame, byte[], int
+      	*@param DepthImageFrame, byte[], int
     * slider_DragCompleted
-      *@param object, System.Windows.Controls.Primitives.DragCompletedEventArgs
+      	*@param object, System.Windows.Controls.Primitives.DragCompletedEventArgs
     * kinect_AllFramesReady
-      *@param object, AllFramesReadyEventArgs
+      	*@param object, AllFramesReadyEventArgs
     * DesenharEsqueletoUsuario
-      *@param SkeletonFrame
+      	*@param SkeletonFrame
     * ObterImagemSensorRGB
-      *@param ColorImageFrame
-      *@return byte[]
+      	*@param ColorImageFrame
+      	*@return byte[]
