@@ -7,7 +7,7 @@ Projeto responsável por reconhecimento dos movimentos do usuário e extração 
 * Daniel Oliveira
 * Natalia Mazzoni
 * Lucas Lozano
-* 
+ 
 ##Organização da pasta
 ```
 └───EstudandoKinect3
