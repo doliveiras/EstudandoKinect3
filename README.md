@@ -7,16 +7,8 @@ Projeto responsável por reconhecimento dos movimentos do usuário e extração 
 * Daniel Oliveira
 * Natalia Mazzoni
 * Lucas Lozano
-
-##Modificações
-###01/06/2016
-#####Desenvolvedores
-* Daniel Oliveira
-
-#####Descrição
-Realização da primeira inclusão do projeto EstudandoKinect3
-
-#####Organização da pasta
+* 
+##Organização da pasta
 ```
 └───EstudandoKinect3
     ├───bin
@@ -29,6 +21,14 @@ Realização da primeira inclusão do projeto EstudandoKinect3
     │       └───TempPE
     └───Properties
 ```
+
+##Modificações
+###01/06/2016
+#####Desenvolvedores
+* Daniel Oliveira
+
+#####Descrição
+Realização da primeira inclusão do projeto EstudandoKinect3
 
 ####**Pasta**/*Classe*/Métodos####
 * **/**
