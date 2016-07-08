@@ -50,18 +50,19 @@ namespace Auxiliar
             }
         }
 
-        /*public static Skeleton ObterEsqueletoUsuario(SkeletonFrame quadro)
+        public static Skeleton ObterEsqueletoUsuario(this SkeletonFrame quadro)
         {
             Skeleton esqueletoUsuario = null;
 
             Skeleton[] esqueletos = new Skeleton[quadro.SkeletonArrayLength];
+
+            quadro.CopySkeletonDataTo(esqueletos);
 
             IEnumerable<Skeleton> esqueletosRastreados = esqueletos.Where(esqueleto => esqueleto.TrackingState == SkeletonTrackingState.Tracked);
 
             if (esqueletosRastreados.Count() > 0) esqueletoUsuario = esqueletosRastreados.First();
 
             return esqueletoUsuario;
-
-        }*/
+        }
     }
 }

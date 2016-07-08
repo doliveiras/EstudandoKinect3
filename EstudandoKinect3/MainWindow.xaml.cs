@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using Microsoft.Kinect;
 using AuxiliarKinect.FuncoesBasicas;
 using Auxiliar;
+using AuxiliarKinect.Movimentos;
+using AuxiliarKinect.Movimentos.Poses;
 
 namespace EstudandoKinect3
 {
@@ -24,10 +26,13 @@ namespace EstudandoKinect3
     public partial class MainWindow : Window
     {
         private KinectSensor kinect;
+        private List<IRastreador> rastreadores;
+
         public MainWindow()
         {
             InitializeComponent();
             InicializadorSeletor();
+            InicializarRastreadores();
         }
 
         private void InicializadorSeletor()
@@ -142,18 +147,24 @@ namespace EstudandoKinect3
             if (imagem != null) canvasKinect.Background = new ImageBrush(BitmapSource.Create(kinect.ColorStream.FrameWidth, kinect.ColorStream.FrameHeight, 96, 96, PixelFormats.Bgr32, null, imagem, kinect.ColorStream.FrameBytesPerPixel * kinect.ColorStream.FrameWidth));
             canvasKinect.Children.Clear();
 
-            if( chkEsqueleto.IsChecked.HasValue && chkEsqueleto.IsChecked.Value)
-            {
+            
+           // if( chkEsqueleto.IsChecked.HasValue && chkEsqueleto.IsChecked.Value)
+           // {
                 DesenharEsqueletoUsuario(e.OpenSkeletonFrame());
-            }
+            //}
         }
 
         //Responsavel por identificar a mão direita e esquerda
         private void DesenharEsqueletoUsuario(SkeletonFrame quadro)
         {
             if (quadro == null) return;
-            
-            using (quadro) quadro.DesenharEsqueletoUsuario(kinect, canvasKinect);
+
+            using (quadro)
+            {
+                    Skeleton esqueletoUsuario = quadro.ObterEsqueletoUsuario();
+                    foreach (IRastreador rastreador in rastreadores) rastreador.Rastrear(esqueletoUsuario);
+                    if (chkEsqueleto.IsChecked.HasValue && chkEsqueleto.IsChecked.Value) quadro.DesenharEsqueletoUsuario(kinect, canvasKinect);
+            }
            
             //old sem Extensao
             /*using (quadro)
@@ -183,10 +194,24 @@ namespace EstudandoKinect3
                 return bytesImagem;
             }
         }
-
         /*private void Inicio (Object sender)
         {
             InicializadorSeletor();
         }*/
+
+
+        //Iniciar rastreador de movimentos
+        private void InicializarRastreadores()
+        {
+            rastreadores = new List<IRastreador>();
+            Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
+            rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
+            rastreadores.Add(rastreadorPoseT);
+        }
+
+        private void PoseTIdentificada(object sender, EventArgs e)
+        {
+            chkEsqueleto.IsChecked = !chkEsqueleto.IsChecked;
+        }
     }
 }
