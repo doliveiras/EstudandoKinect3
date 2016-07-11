@@ -204,14 +204,47 @@ namespace EstudandoKinect3
         private void InicializarRastreadores()
         {
             rastreadores = new List<IRastreador>();
+
             Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
             rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
+
+            Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
+            rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
+            rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
+            
             rastreadores.Add(rastreadorPoseT);
+            rastreadores.Add(rastreadorPosePause);
         }
 
         private void PoseTIdentificada(object sender, EventArgs e)
         {
             chkEsqueleto.IsChecked = !chkEsqueleto.IsChecked;
+        }
+
+        private void PosePauseIdentificada(object sender, EventArgs e)
+        {
+            chkEscalaCinza.IsChecked = !chkEscalaCinza.IsChecked;
+        }
+
+        private void PosePauseEmProgresso(object sender, EventArgs e)
+        {
+            PosePause pose = sender as PosePause;
+            Rectangle retangulo = new Rectangle();
+
+            retangulo.Width = canvasKinect.ActualWidth;
+            retangulo.Height = 20;
+            retangulo.Fill = Brushes.Black;
+
+            Rectangle poseRetangulo = new Rectangle();
+
+            poseRetangulo.Width = canvasKinect.ActualWidth * pose.PercentualProgresso / 100;
+
+            poseRetangulo.Height = 20;
+            poseRetangulo.Fill = Brushes.BlueViolet;
+
+            canvasKinect.Children.Add(retangulo);
+            canvasKinect.Children.Add(poseRetangulo);
+
         }
     }
 }
