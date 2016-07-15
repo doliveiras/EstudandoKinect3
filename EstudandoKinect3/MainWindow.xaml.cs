@@ -17,6 +17,7 @@ using AuxiliarKinect.FuncoesBasicas;
 using Auxiliar;
 using AuxiliarKinect.Movimentos;
 using AuxiliarKinect.Movimentos.Poses;
+using AuxiliarKinect.Movimentos.Gestos.Aceno;
 
 namespace EstudandoKinect3
 {
@@ -211,9 +212,13 @@ namespace EstudandoKinect3
             Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
             rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
             rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
-            
+
+            Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
+            rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
+
             rastreadores.Add(rastreadorPoseT);
             rastreadores.Add(rastreadorPosePause);
+            rastreadores.Add(rastreadorAceno);
         }
 
         private void PoseTIdentificada(object sender, EventArgs e)
@@ -245,6 +250,11 @@ namespace EstudandoKinect3
             canvasKinect.Children.Add(retangulo);
             canvasKinect.Children.Add(poseRetangulo);
 
+        }
+
+        private void AcenoIndentificado(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
