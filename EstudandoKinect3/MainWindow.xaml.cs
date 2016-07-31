@@ -254,6 +254,7 @@ namespace EstudandoKinect3
 
         private void AcenoIndentificado(object sender, EventArgs e)
         {
+            Console.WriteLine("Aehoo");
             Application.Current.Shutdown();
         }
     }

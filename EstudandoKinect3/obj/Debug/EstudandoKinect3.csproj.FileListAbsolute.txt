@@ -35,3 +35,4 @@ C:\Users\Lucas\Source\Repos\EstudandoKinect3\EstudandoKinect3\obj\Debug\Estudand
 C:\Users\Lucas\Source\Repos\EstudandoKinect3\EstudandoKinect3\obj\Debug\EstudandoKinect3.Properties.Resources.resources
 C:\Users\Lucas\Source\Repos\EstudandoKinect3\EstudandoKinect3\obj\Debug\EstudandoKinect3.csproj.GenerateResource.Cache
 C:\Users\Lucas\Source\Repos\EstudandoKinect3\EstudandoKinect3\bin\Debug\Microsoft.Kinect.dll
+C:\Users\Lucas\Source\Repos\EstudandoKinect3\EstudandoKinect3\bin\Debug\Microsoft.Kinect.Toolkit.dll
