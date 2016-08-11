@@ -209,15 +209,15 @@ namespace EstudandoKinect3
           //  Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
           //  rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
 
-            Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
-            rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
-            rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
+          //  Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
+          //  rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
+          //  rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
 
-            Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
+           Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
             rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
 
         //    rastreadores.Add(rastreadorPoseT);
-            rastreadores.Add(rastreadorPosePause);
+      //      rastreadores.Add(rastreadorPosePause);
             rastreadores.Add(rastreadorAceno);
         }
 
