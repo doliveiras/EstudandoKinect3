@@ -18,6 +18,7 @@ using Auxiliar;
 using AuxiliarKinect.Movimentos;
 using AuxiliarKinect.Movimentos.Poses;
 using AuxiliarKinect.Movimentos.Gestos.Aceno;
+using AuxiliarKinect.Movimentos.Gestos.AlavancaDeAntebracoDireito;
 
 namespace EstudandoKinect3
 {
@@ -216,9 +217,13 @@ namespace EstudandoKinect3
            Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
             rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
 
+            Rastreador<AlavancaDeAntebracoDireito> rastreadorAlavancaAntebraco= new Rastreador<AlavancaDeAntebracoDireito>();
+            rastreadorAlavancaAntebraco.MovimentoIdentificado += PosePauseIdentificada;
+
         //    rastreadores.Add(rastreadorPoseT);
-      //      rastreadores.Add(rastreadorPosePause);
-            rastreadores.Add(rastreadorAceno);
+        //      rastreadores.Add(rastreadorPosePause);
+         //   rastreadores.Add(rastreadorAceno);
+            rastreadores.Add(rastreadorAlavancaAntebraco);
         }
 
         private void PoseTIdentificada(object sender, EventArgs e)
