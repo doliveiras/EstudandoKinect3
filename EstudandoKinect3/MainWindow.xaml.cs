@@ -49,7 +49,7 @@ namespace EstudandoKinect3
             //Recebe informações do sensor kinect
             kinect = kinectSensor;
 
-            //Slider com eixo motor do kinect
+            //Slider com eixo motor do kinects
             slider.Value = kinect.ElevationAngle;
 
             kinect.DepthStream.Enable();
@@ -207,23 +207,23 @@ namespace EstudandoKinect3
         {
             rastreadores = new List<IRastreador>();
 
-            Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
-            rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
+            //Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
+            //rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
 
-            Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
-            rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
-            rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
+            //Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
+            //rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
+            //rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
 
-           Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
-            rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
+            //Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
+            //rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
 
-            Rastreador<AlavancaDeAntebracoDireito> rastreadorAlavancaAntebraco= new Rastreador<AlavancaDeAntebracoDireito>();
-            rastreadorAlavancaAntebraco.MovimentoIdentificado += PosePauseIdentificada;
+             //Rastreador<AlavancaDeAntebracoDireito> rastreadorAlavancaAntebraco= new Rastreador<AlavancaDeAntebracoDireito>();
+             //rastreadorAlavancaAntebraco.MovimentoIdentificado += PosePauseIdentificada;
 
-             rastreadores.Add(rastreadorPoseT);
-             rastreadores.Add(rastreadorPosePause);
-             rastreadores.Add(rastreadorAceno);
-             rastreadores.Add(rastreadorAlavancaAntebraco);
+             //rastreadores.Add(rastreadorPoseT);
+             //rastreadores.Add(rastreadorPosePause);
+             //rastreadores.Add(rastreadorAceno);
+             //rastreadores.Add(rastreadorAlavancaAntebraco);
         }
 
         private void PoseTIdentificada(object sender, EventArgs e)
@@ -261,6 +261,53 @@ namespace EstudandoKinect3
         {
             Console.WriteLine("Aehoo");
             Application.Current.Shutdown();
+        }
+
+        private void teste_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(setMovimento("T"));
+            
+        }
+
+        private void teste_Click1(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(setMovimento("Aceno"));
+        }
+
+        private void movimentoT()
+        {
+            Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
+            rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
+            rastreadores.Add(rastreadorPoseT);
+        }
+
+        private void movimentoAceno()
+        {
+            Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
+            rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
+            rastreadores.Add(rastreadorAceno);
+        }
+
+        public String setMovimento(String nomeMovimento)
+        {
+            
+            for (int i = 0; i < rastreadores.Count; i++)
+            {
+                    rastreadores.RemoveAt(i);
+            }
+            
+            switch (nomeMovimento)
+            {
+                case "Aceno":
+                    movimentoAceno();
+                    break;
+                case "T":
+                    movimentoT();
+                    break;
+                default:
+                    break;
+            }
+            return "Movimento a ser executado: "  + nomeMovimento;
         }
     }
 }

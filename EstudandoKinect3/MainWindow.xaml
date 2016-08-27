@@ -22,6 +22,8 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <CheckBox Name="chkEscalaCinza" Content="Escala Cinza"  Margin="10,10,0,0" Width="70" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top"/>
             <CheckBox Name="chkEsqueleto" Content="Esqueleto do Usuário" HorizontalAlignment="Left" Margin="10,10,0,10"></CheckBox>
+            <Button Name="teste" HorizontalAlignment="Left" Margin="20,10,0,10" Width="91" Content="RastrearPoseT" Click="teste_Click"></Button>
+            <Button Name="teste1" HorizontalAlignment="Left" Margin="20,10,0,10" Width="91" Content="RastrearAceno" Click="teste_Click1"></Button>
         </StackPanel>
 
         <k:KinectSensorChooserUI Name="seletorSensorUI" HorizontalAlignment="Center" VerticalAlignment="Top"/>
