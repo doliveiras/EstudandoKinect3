@@ -17,8 +17,9 @@ using AuxiliarKinect.FuncoesBasicas;
 using Auxiliar;
 using AuxiliarKinect.Movimentos;
 using AuxiliarKinect.Movimentos.Poses;
-using AuxiliarKinect.Movimentos.Gestos.Aceno;
 using AuxiliarKinect.Movimentos.Gestos.AlavancaDeAntebracoDireito;
+using AuxiliarKinect.Movimentos.Gestos.ExtensaoJoelhoDireitoSentado;
+using AuxiliarKinect.Movimentos.Gestos.Aceno;
 
 namespace EstudandoKinect3
 {
@@ -29,12 +30,14 @@ namespace EstudandoKinect3
     {
         private KinectSensor kinect;
         private List<IRastreador> rastreadores;
-
+        private int i;
+        List<string> b;
         public MainWindow()
         {
             InitializeComponent();
             InicializadorSeletor();
             InicializarRastreadores();
+            i = 0;
         }
 
         private void InicializadorSeletor()
@@ -164,7 +167,8 @@ namespace EstudandoKinect3
             using (quadro)
             {
                     Skeleton esqueletoUsuario = quadro.ObterEsqueletoUsuario();
-                    foreach (IRastreador rastreador in rastreadores) rastreador.Rastrear(esqueletoUsuario);
+                    //foreach (IRastreador rastreador in rastreadores) rastreador.Rastrear(esqueletoUsuario);
+                    rastreadores[i].Rastrear(esqueletoUsuario);
                     if (chkEsqueleto.IsChecked.HasValue && chkEsqueleto.IsChecked.Value) quadro.DesenharEsqueletoUsuario(kinect, canvasKinect);
             }
            
@@ -206,34 +210,44 @@ namespace EstudandoKinect3
         private void InicializarRastreadores()
         {
             rastreadores = new List<IRastreador>();
+            b = new List<string>();
+            b.Add("T");
+            b.Add("Aceno");
+            b.Add("T");
+            setListaMovimentos(b);
+            // Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
+            // rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
 
-            Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
-            rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
+         //   Rastreador<ExtensaoJoelhoDireitoSentado> rastreadorJoelhoDireito = new Rastreador<ExtensaoJoelhoDireitoSentado>();
+           // rastreadorJoelhoDireito.MovimentoIdentificado += PoseTIdentificada;
 
-            Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
-            rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
-            rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
+            //  Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
+            //   rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
+            //   rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
 
-           Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
-            rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
+            ///  Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
+            //  rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
 
-            Rastreador<AlavancaDeAntebracoDireito> rastreadorAlavancaAntebraco= new Rastreador<AlavancaDeAntebracoDireito>();
-            rastreadorAlavancaAntebraco.MovimentoIdentificado += PosePauseIdentificada;
+            //   Rastreador<AlavancaDeAntebracoDireito> rastreadorAlavancaAntebraco= new Rastreador<AlavancaDeAntebracoDireito>();
+            //   rastreadorAlavancaAntebraco.MovimentoIdentificado += PosePauseIdentificada;
 
-             rastreadores.Add(rastreadorPoseT);
-             rastreadores.Add(rastreadorPosePause);
-             rastreadores.Add(rastreadorAceno);
-             rastreadores.Add(rastreadorAlavancaAntebraco);
+        //     rastreadores.Add(rastreadorJoelhoDireito);
+            // rastreadores.Add(rastreadorPosePause);
+            // rastreadores.Add(rastreadorAceno);
+            // rastreadores.Add(rastreadorAlavancaAntebraco);
         }
 
         private void PoseTIdentificada(object sender, EventArgs e)
         {
             chkEsqueleto.IsChecked = !chkEsqueleto.IsChecked;
+            i++;
         }
 
         private void PosePauseIdentificada(object sender, EventArgs e)
         {
             chkEscalaCinza.IsChecked = !chkEscalaCinza.IsChecked;
+            i++;
+            Console.WriteLine(i);
         }
 
         private void PosePauseEmProgresso(object sender, EventArgs e)
@@ -261,6 +275,45 @@ namespace EstudandoKinect3
         {
             Console.WriteLine("Aehoo");
             Application.Current.Shutdown();
+        }
+
+        private void setListaMovimentos(List<string> a)
+        {
+            foreach(string mov in a)
+            {
+                switch (mov)
+                {
+                    case "T":
+                        AddT();
+                        break;
+                    case "Aceno":
+                        AddAceno();
+                        break;
+                default:
+                        Console.WriteLine("Fim");
+                        break;
+
+                }
+            }
+            
+            
+
+        }
+
+        private void AddT()
+        {
+            Rastreador<PoseT> rastreador = new Rastreador<PoseT>();
+            rastreador.MovimentoIdentificado += PoseTIdentificada;
+            rastreadores.Add(rastreador);
+            Console.WriteLine(rastreadores[rastreadores.Count - 1]);
+        }
+
+        private void AddAceno()
+        {
+            Rastreador<PosePause> rastreador = new Rastreador<PosePause>();
+            rastreador.MovimentoIdentificado += PosePauseIdentificada;
+            rastreadores.Add(rastreador);
+            Console.WriteLine(rastreadores[rastreadores.Count - 1]);
         }
     }
 }
