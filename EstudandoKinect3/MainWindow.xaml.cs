@@ -146,7 +146,6 @@ namespace EstudandoKinect3
                     }
                     if (!sessao.proximoMovimento().Equals("proximo"))
                     {
-                        Console.WriteLine(rastreador.GetType());
                         rastreador.Rastrear(esqueletoUsuario);
                     }
 
@@ -191,6 +190,18 @@ namespace EstudandoKinect3
 
             movs.Enqueue("Aceno");
             repeticoes.Enqueue(1);
+            serie.Enqueue(2);
+
+            movs.Enqueue("AlavancaBracoDireito");
+            repeticoes.Enqueue(2);
+            serie.Enqueue(2);
+
+            //movs.Enqueue("InclinarCabecaDireita");
+            //repeticoes.Enqueue(2);
+            //serie.Enqueue(2);
+
+            movs.Enqueue("ExtensaoJoelhoDireitoSentado");
+            repeticoes.Enqueue(2);
             serie.Enqueue(2);
 
             sessao = new Sessao();
@@ -242,7 +253,7 @@ namespace EstudandoKinect3
 
         private void setListaMovimentos(string a)
         {
-            Console.WriteLine(a);
+           // Console.WriteLine(a);
                 switch (a)
                 {
                     case "T":
@@ -250,6 +261,15 @@ namespace EstudandoKinect3
                         break;
                     case "Aceno":
                         AddAceno();
+                        break;
+                    case "AlavancaBracoDireito":
+                        AddAlavancaBracoDireito();
+                        break;
+                    case "InclinarCabecaDireita":
+                         AddInclinarCabecaDireita();
+                        break;
+                    case "ExtensaoJoelhoDireitoSentado":
+                        AddExtensaoJoelhoDireitoSentado();
                         break;
                 default:
                         Console.WriteLine("Fim");
@@ -265,10 +285,30 @@ namespace EstudandoKinect3
             rastreador = ras;
            // Console.WriteLine(rastreadores[rastreadores.Count - 1]);
         }
-
+        private void AddAlavancaBracoDireito()
+        {
+            Rastreador<AlavancaDeAntebracoDireito> ras = new Rastreador<AlavancaDeAntebracoDireito>();
+            ras.MovimentoIdentificado += PoseTIdentificada;
+            rastreador = ras;
+            // Console.WriteLine(rastreadores[rastreadores.Count - 1]);
+        }
+        private void AddInclinarCabecaDireita()
+        {
+            Rastreador<InclinarCabecaDireita> ras = new Rastreador<InclinarCabecaDireita>();
+            ras.MovimentoIdentificado += PoseTIdentificada;
+            rastreador = ras;
+            // Console.WriteLine(rastreadores[rastreadores.Count - 1]);
+        }
+        private void AddExtensaoJoelhoDireitoSentado()
+        {
+            Rastreador<ExtensaoJoelhoDireitoSentado> ras = new Rastreador<ExtensaoJoelhoDireitoSentado>();
+            ras.MovimentoIdentificado += PoseTIdentificada;
+            rastreador = ras;
+            // Console.WriteLine(rastreadores[rastreadores.Count - 1]);
+        }
         private void AddAceno()
         {
-            Rastreador<PosePause> ras= new Rastreador<PosePause>();
+            Rastreador<Aceno> ras= new Rastreador<Aceno>();
             //original descomentar ras.MovimentoIdentificado += PosePauseIdentificada;
             ras.MovimentoIdentificado += PoseTIdentificada;
             rastreador = ras;
