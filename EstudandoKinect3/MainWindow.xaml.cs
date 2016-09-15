@@ -20,24 +20,20 @@ using AuxiliarKinect.Movimentos.Poses;
 using AuxiliarKinect.Movimentos.Gestos.AlavancaDeAntebracoDireito;
 using AuxiliarKinect.Movimentos.Gestos.ExtensaoJoelhoDireitoSentado;
 using AuxiliarKinect.Movimentos.Gestos.Aceno;
+using AuxiliarKinect.Movimentos.Gestos.InclinarCabeçaDireita;
 
 namespace EstudandoKinect3
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private KinectSensor kinect;
-        private List<IRastreador> rastreadores;
-        private int i;
-        List<string> b;
+        private IRastreador rastreador;
+        private Sessao sessao;
         public MainWindow()
         {
             InitializeComponent();
             InicializadorSeletor();
             InicializarRastreadores();
-            i = 0;
         }
 
         private void InicializadorSeletor()
@@ -88,23 +84,6 @@ namespace EstudandoKinect3
             }
         }
 
-        //old Métodos para imagens sem profundidade
-        /*
-        private void kinect_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
-        {
-            imagemCamera.Source = ReconhecerHumanos(e.OpenDepthImageFrame());
-        }
-
-        private byte[] ObterImagemSensorRGB(ColorImageFrame quadro)
-        {
-            if (quadro == null) return null;
-            using (quadro)
-            {
-                byte[] bytesImagem = new byte[quadro.PixelDataLength];
-                quadro.CopyPixelDataTo(bytesImagem);
-                return bytesImagem;
-            }
-        }*/
 
         //Reconhece a distancia
         private void ReconhecerDistancia(DepthImageFrame quadro, byte[] bytesImagem, int distanciaMaxima)
@@ -128,15 +107,6 @@ namespace EstudandoKinect3
 
             }
         }
-
-        //old
-        /*private void kinect_AllFramesReady(object sender, AllFramesReadyEventArgs e)
-        {
-            byte[] imagem = ObterImagemSensorRGB(e.OpenColorImageFrame());
-            if (chkEscalaCinza.IsChecked.HasValue && chkEscalaCinza.IsChecked.Value) ReconhecerDistancia(e.OpenDepthImageFrame(), imagem, 2000);
-            if (imagem != null) imagemCamera.Source = BitmapSource.Create(kinect.ColorStream.FrameWidth, kinect.ColorStream.FrameHeight, 96, 96, PixelFormats.Bgr32, null, imagem, kinect.ColorStream.FrameBytesPerPixel * kinect.ColorStream.FrameWidth);
-
-        }*/
 
         //método para atrelar o slider junto ao slider
         private void slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -166,27 +136,29 @@ namespace EstudandoKinect3
 
             using (quadro)
             {
-                    Skeleton esqueletoUsuario = quadro.ObterEsqueletoUsuario();
-                    //foreach (IRastreador rastreador in rastreadores) rastreador.Rastrear(esqueletoUsuario);
-                    rastreadores[i].Rastrear(esqueletoUsuario);
-                    if (chkEsqueleto.IsChecked.HasValue && chkEsqueleto.IsChecked.Value) quadro.DesenharEsqueletoUsuario(kinect, canvasKinect);
-            }
-           
-            //old sem Extensao
-            /*using (quadro)
-            {
-            
-                Skeleton[] esqueletos = new Skeleton[quadro.SkeletonArrayLength];
-                quadro.CopySkeletonDataTo(esqueletos);
-                IEnumerable<Skeleton> esqueletosRastreados = esqueletos.Where(esqueleto => esqueleto.TrackingState == SkeletonTrackingState.Tracked);
-                if (esqueletosRastreados.Count() > 0)
+                Skeleton esqueletoUsuario = quadro.ObterEsqueletoUsuario();
+                //foreach (IRastreador rastreador in rastreadores) rastreador.Rastrear(esqueletoUsuario);
+                if(sessao!= null)
                 {
-                    Skeleton esqueleto = esqueletosRastreados.First();
-                    EsqueletoUsuarioAuxiliar funcoesEsqueletos = new EsqueletoUsuarioAuxiliar(kinect);
-                    funcoesEsqueletos.DesenharArticulacao(esqueleto.Joints[JointType.HandRight], canvasKinect);
-                    funcoesEsqueletos.DesenharArticulacao(esqueleto.Joints[JointType.HandLeft], canvasKinect);
+                    if (sessao.proximoMovimento().Equals("fim"))
+                    {
+                        Application.Current.Shutdown();
+                    }
+                    if (!sessao.proximoMovimento().Equals("proximo"))
+                    {
+                        Console.WriteLine(rastreador.GetType());
+                        rastreador.Rastrear(esqueletoUsuario);
+                    }
+
+                    else
+                    {
+                        setListaMovimentos(sessao.proximoMovimento());
+                    }
                 }
-            }*/
+               
+                if (chkEsqueleto.IsChecked.HasValue && chkEsqueleto.IsChecked.Value) quadro.DesenharEsqueletoUsuario(kinect, canvasKinect);
+            }
+ 
         }
     
         //Obtem imagem do kinect e o retorna
@@ -209,45 +181,36 @@ namespace EstudandoKinect3
         //Iniciar rastreador de movimentos
         private void InicializarRastreadores()
         {
-            rastreadores = new List<IRastreador>();
-            b = new List<string>();
-            b.Add("T");
-            b.Add("Aceno");
-            b.Add("T");
-            setListaMovimentos(b);
-            // Rastreador<PoseT> rastreadorPoseT = new Rastreador<PoseT>();
-            // rastreadorPoseT.MovimentoIdentificado += PoseTIdentificada;
+            Queue<String> movs = new Queue<string>();
+            Queue<int> repeticoes = new Queue<int>();
+            Queue<int> serie = new Queue<int>();
 
-         //   Rastreador<ExtensaoJoelhoDireitoSentado> rastreadorJoelhoDireito = new Rastreador<ExtensaoJoelhoDireitoSentado>();
-           // rastreadorJoelhoDireito.MovimentoIdentificado += PoseTIdentificada;
+            movs.Enqueue("T");
+            repeticoes.Enqueue(2);
+            serie.Enqueue(2);
 
-            //  Rastreador<PosePause> rastreadorPosePause = new Rastreador<PosePause>();
-            //   rastreadorPosePause.MovimentoIdentificado += PosePauseIdentificada;
-            //   rastreadorPosePause.MovimentoEmProgresso += PosePauseEmProgresso;
+            movs.Enqueue("Aceno");
+            repeticoes.Enqueue(1);
+            serie.Enqueue(2);
 
-            ///  Rastreador<Aceno> rastreadorAceno = new Rastreador<Aceno>();
-            //  rastreadorAceno.MovimentoIdentificado += AcenoIndentificado;
+            sessao = new Sessao();
+            sessao.start(movs, repeticoes, serie);
 
-            //   Rastreador<AlavancaDeAntebracoDireito> rastreadorAlavancaAntebraco= new Rastreador<AlavancaDeAntebracoDireito>();
-            //   rastreadorAlavancaAntebraco.MovimentoIdentificado += PosePauseIdentificada;
-
-        //     rastreadores.Add(rastreadorJoelhoDireito);
-            // rastreadores.Add(rastreadorPosePause);
-            // rastreadores.Add(rastreadorAceno);
-            // rastreadores.Add(rastreadorAlavancaAntebraco);
+            setListaMovimentos(sessao.proximoMovimento());
         }
 
         private void PoseTIdentificada(object sender, EventArgs e)
         {
             chkEsqueleto.IsChecked = !chkEsqueleto.IsChecked;
-            i++;
+            sessao.ProximaRepeticao();
+            //i++;
         }
 
         private void PosePauseIdentificada(object sender, EventArgs e)
         {
             chkEscalaCinza.IsChecked = !chkEscalaCinza.IsChecked;
-            i++;
-            Console.WriteLine(i);
+           // i++;
+           // Console.WriteLine(i);
         }
 
         private void PosePauseEmProgresso(object sender, EventArgs e)
@@ -277,11 +240,10 @@ namespace EstudandoKinect3
             Application.Current.Shutdown();
         }
 
-        private void setListaMovimentos(List<string> a)
+        private void setListaMovimentos(string a)
         {
-            foreach(string mov in a)
-            {
-                switch (mov)
+            Console.WriteLine(a);
+                switch (a)
                 {
                     case "T":
                         AddT();
@@ -294,26 +256,23 @@ namespace EstudandoKinect3
                         break;
 
                 }
-            }
-            
-            
-
         }
 
         private void AddT()
         {
-            Rastreador<PoseT> rastreador = new Rastreador<PoseT>();
-            rastreador.MovimentoIdentificado += PoseTIdentificada;
-            rastreadores.Add(rastreador);
-            Console.WriteLine(rastreadores[rastreadores.Count - 1]);
+            Rastreador<PoseT> ras = new Rastreador<PoseT>();
+            ras.MovimentoIdentificado += PoseTIdentificada;
+            rastreador = ras;
+           // Console.WriteLine(rastreadores[rastreadores.Count - 1]);
         }
 
         private void AddAceno()
         {
-            Rastreador<PosePause> rastreador = new Rastreador<PosePause>();
-            rastreador.MovimentoIdentificado += PosePauseIdentificada;
-            rastreadores.Add(rastreador);
-            Console.WriteLine(rastreadores[rastreadores.Count - 1]);
+            Rastreador<PosePause> ras= new Rastreador<PosePause>();
+            //original descomentar ras.MovimentoIdentificado += PosePauseIdentificada;
+            ras.MovimentoIdentificado += PoseTIdentificada;
+            rastreador = ras;
+           // Console.WriteLine(rastreadores[rastreadores.Count - 1]);
         }
     }
 }
