@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 using AuxiliarKinect.FuncoesBasicas;
@@ -138,21 +130,31 @@ namespace EstudandoKinect3
             {
                 Skeleton esqueletoUsuario = quadro.ObterEsqueletoUsuario();
                 //foreach (IRastreador rastreador in rastreadores) rastreador.Rastrear(esqueletoUsuario);
-                if(sessao!= null)
+                if (sessao != null && sessao.IntervaloFinalizado())
                 {
-                    if (sessao.proximoMovimento().Equals("fim"))
+
+                    if (sessao.proximoMovimento().Equals("proximo"))
                     {
+                        Console.Write("yeh3");
+                        setListaMovimentos(sessao.proximoMovimento());
+                    }
+
+                    else if (sessao.proximoMovimento().Equals("fim"))
+                    {
+                        Console.Write("yeh1");
                         Application.Current.Shutdown();
-                    }
-                    if (!sessao.proximoMovimento().Equals("proximo"))
-                    {
-                        rastreador.Rastrear(esqueletoUsuario);
-                    }
+                    }         
 
                     else
                     {
-                        setListaMovimentos(sessao.proximoMovimento());
+                       // Console.Write("yeh2");
+                        rastreador.Rastrear(esqueletoUsuario);
                     }
+                }
+
+                else if (sessao != null)
+                {
+                    if(sessao.timeLeft() >= 0)Console.WriteLine("Tempo restante: " + sessao.timeLeft());
                 }
                
                 if (chkEsqueleto.IsChecked.HasValue && chkEsqueleto.IsChecked.Value) quadro.DesenharEsqueletoUsuario(kinect, canvasKinect);
@@ -188,9 +190,9 @@ namespace EstudandoKinect3
             repeticoes.Enqueue(2);
             serie.Enqueue(2);
 
-            movs.Enqueue("Aceno");
-            repeticoes.Enqueue(1);
-            serie.Enqueue(2);
+          //  movs.Enqueue("Aceno");
+           // repeticoes.Enqueue(1);
+           // serie.Enqueue(2);
 
             movs.Enqueue("AlavancaBracoDireito");
             repeticoes.Enqueue(2);
@@ -214,14 +216,16 @@ namespace EstudandoKinect3
         {
             chkEsqueleto.IsChecked = !chkEsqueleto.IsChecked;
             sessao.ProximaRepeticao();
-            //i++;
         }
 
         private void PosePauseIdentificada(object sender, EventArgs e)
         {
             chkEscalaCinza.IsChecked = !chkEscalaCinza.IsChecked;
-           // i++;
-           // Console.WriteLine(i);
+        }
+
+        private void movimentoIdentificado()
+        {
+            sessao.ProximaRepeticao();
         }
 
         private void PosePauseEmProgresso(object sender, EventArgs e)
@@ -253,7 +257,8 @@ namespace EstudandoKinect3
 
         private void setListaMovimentos(string a)
         {
-           // Console.WriteLine(a);
+            
+           Console.WriteLine(a);
                 switch (a)
                 {
                     case "T":
@@ -309,8 +314,8 @@ namespace EstudandoKinect3
         private void AddAceno()
         {
             Rastreador<Aceno> ras= new Rastreador<Aceno>();
-            //original descomentar ras.MovimentoIdentificado += PosePauseIdentificada;
-            ras.MovimentoIdentificado += PoseTIdentificada;
+            // descomentar ras.MovimentoIdentificado += PosePauseIdentificada;
+            ras.MovimentoIdentificado += PoseTIdentificada; 
             rastreador = ras;
            // Console.WriteLine(rastreadores[rastreadores.Count - 1]);
         }
